@@ -7,9 +7,6 @@ This example prints **a lot** of text to the console.
 !*/
 
 #[cfg(feature = "alloc")]
-extern crate bitvec;
-
-#[cfg(feature = "alloc")]
 use bitvec::{
 	//  `bitvec!` macro
 	bitvec,
