@@ -1,6 +1,6 @@
 [package]
 name = "bitvec"
-version = "0.9.0"
+version = "0.9.0-e2018"
 authors = [
 	"myrrlyn <myrrlyn@outlook.com>",
 ]
@@ -12,6 +12,7 @@ categories = [
 ]
 description = "A crate for manipulating memory, bit by bit"
 documentation = "https://docs.rs/bitvec"
+edition = "2018"
 homepage = "https://myrrlyn.net/bitvec"
 keywords = [
 	"bits",

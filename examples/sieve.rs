@@ -23,9 +23,6 @@ square 25x25.
 !*/
 
 #[cfg(feature = "alloc")]
-extern crate bitvec;
-
-#[cfg(feature = "alloc")]
 use bitvec::{
 	BitVec,
 	BigEndian,

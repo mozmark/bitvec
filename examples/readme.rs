@@ -2,9 +2,6 @@
 !*/
 
 #[cfg(feature = "alloc")]
-extern crate bitvec;
-
-#[cfg(feature = "alloc")]
 use bitvec::*;
 
 #[cfg(feature = "alloc")]
