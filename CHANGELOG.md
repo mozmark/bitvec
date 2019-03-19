@@ -2,6 +2,15 @@
 
 All notable changes will be documented in this file.
 
+## 0.11.0
+
+### Changed
+
+- Upgraded the minimum compiler version to `1.33.0` to use the newly stabilized
+  `const fn` methods on the integer fundamentals. The `Bits` trait is now fully
+  templated, except for the `TYPENAME` text. This is on the roadmap to be
+  removed.
+
 ## 0.10.0
 
 This version was a complete rewrite of the entire crate. The minimum compiler

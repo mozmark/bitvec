@@ -1,0 +1,11 @@
+[book]
+title = "BitVec Manual"
+author = [
+	"myrrlyn",
+]
+description = "Describes the internals and API of BitVec"
+src = "book"
+
+[build]
+build-dir = "target/book"
+create-missing = true

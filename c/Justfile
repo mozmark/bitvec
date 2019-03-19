@@ -1,0 +1,18 @@
+build:
+	clang++ -std=c++11 -I. -L../target/debug demo.cpp -lbitvec -o ../target/crusty
+
+ci:
+	watchexec -- just dev
+
+dev:
+	just ../rust/ffi
+	just doc
+	just build
+	just run
+
+doc:
+	mkdir -p ../target/ffi/docs
+	doxygen Doxyfile > /dev/null
+
+run:
+	../target/crusty

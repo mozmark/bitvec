@@ -1,0 +1,28 @@
+check:
+	cargo check --features ffi
+
+ci:
+	cargo watch -s "just dev"
+
+checkout:
+	cargo check
+	cargo doc --features testing --document-private-items
+	cargo build
+	cargo build --example sieve
+	cargo build --example tour
+	cargo test --features testing
+	cargo package --allow-dirty
+
+clean:
+	cargo clean
+
+dev: check test doc
+
+doc:
+	cargo doc --features testing,ffi --document-private-items
+
+ffi:
+	cargo build --features ffi
+
+test:
+	cargo test --features ffi

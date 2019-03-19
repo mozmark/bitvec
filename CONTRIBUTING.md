@@ -7,9 +7,9 @@ Contributions are absolutely welcome!
 In order of likelihood that I will actionably receive your contact, my
 information is:
 
-- [appayne@outlook.com](mailto:appayne@outlook.com)
-- [@myrrlyn](//github.com/myrrlyn)
+- [self@myrrlyn.dev](mailto:self@myrrlyn.dev)
 - [@myrrlyn](//twitter.com/myrrlyn)
+- [@myrrlyn](//github.com/myrrlyn)
 - [@myrrlyn@cybre.space](//cybre.space/myrrlyn)
 - [/u/myrrlyn](//reddit.com/u/myrrlyn)
 
@@ -18,7 +18,7 @@ channel, so you may be able to reach me there, but I don’t know offhand how to
 give out Discord profile links. I have a very consistent username scheme and so
 anywhere you see my name, it’s *probably* me and I’ll *probably* respond to it.
 
-## Preconditions
+## Preconditions -- Things You Should Know Before Modifying
 
 Be able to make a Rust project compile. I will happily help you learn how to do
 this, but this particular crate is probably not something you want to explore as
