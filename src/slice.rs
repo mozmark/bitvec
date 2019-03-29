@@ -9,11 +9,13 @@ Rust slices, and must never be interchanged except through the provided APIs.
 !*/
 
 use crate::{
-	BigEndian,
-	BitPtr,
-	Bits,
-	Cursor,
+	bits::Bits,
+	cursor::{
+		BigEndian,
+		Cursor,
+	},
 	domain::*,
+	pointer::BitPtr,
 };
 use core::{
 	cmp::{
@@ -72,7 +74,7 @@ use core::{
 };
 
 #[cfg(feature = "alloc")]
-use crate::BitVec;
+use crate::vec::BitVec;
 
 #[cfg(all(feature = "alloc", not(feature = "std")))]
 use alloc::borrow::ToOwned;
@@ -98,7 +100,7 @@ represented by a crate-internal pointer structure that ***cannot*** be used with
 other Rust code except through the provided conversion APIs.
 
 ```rust
-use bitvec::*;
+use bitvec::prelude::*;
 
 let store: &[u8] = &[0x69];
 //  slicing a bitvec
@@ -112,7 +114,7 @@ Bit slices are either mutable or shared. The shared slice type is
 example, you can mutate bits in the memory to which a mutable `BitSlice` points:
 
 ```rust
-use bitvec::*;
+use bitvec::prelude::*;
 let mut base = [0u8, 0, 0, 0];
 {
  let bs: &mut BitSlice = (&mut base[..]).into();
@@ -168,7 +170,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let bv: &BitSlice = BitSlice::empty();
 	/// ```
@@ -186,7 +188,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let bv: &mut BitSlice = BitSlice::empty_mut();
 	/// ```
@@ -207,7 +209,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0];
 	/// let bv: &BitSlice = store.into();
@@ -230,7 +232,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let bv: &BitSlice = BitSlice::empty();
 	/// assert!(bv.is_empty());
@@ -254,7 +256,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// assert!(BitSlice::<BigEndian, u8>::empty().first().is_none());
 	/// let bv: &BitSlice = (&[128u8] as &[u8]).into();
@@ -283,7 +285,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// assert!(BitSlice::<BigEndian, u8>::empty().split_first().is_none());
 	///
@@ -340,7 +342,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// assert!(BitSlice::<BigEndian, u8>::empty().split_last().is_none());
 	///
@@ -397,7 +399,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// assert!(BitSlice::<BigEndian, u8>::empty().last().is_none());
 	/// let bv: &BitSlice = (&[1u8] as &[u8]).into();
@@ -422,7 +424,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let bv: &BitSlice = (&[8u8] as &[u8]).into();
 	/// assert!(bv.get(4).unwrap());
@@ -450,7 +452,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [8u8];
 	/// let bv: &mut BitSlice = store.into();
@@ -489,7 +491,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0; 4];
 	/// let bv: &BitSlice = store.into();
@@ -520,7 +522,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut[0; 4];
 	/// let store_ptr = store.as_mut_ptr();
@@ -546,7 +548,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut[32u8];
 	/// let bv: &mut BitSlice = store.into();
@@ -574,7 +576,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut[0b1010_1010];
 	/// {
@@ -620,7 +622,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[64];
 	/// let bv: &BitSlice = store.into();
@@ -653,7 +655,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0100_1011];
 	/// let bv: &BitSlice = store.into();
@@ -694,7 +696,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0100_1011];
 	/// let bv: &BitSlice = store.into();
@@ -758,7 +760,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0100_1011];
 	/// let bv: &BitSlice = store.into();
@@ -831,7 +833,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0100_1011];
 	/// let bv: &BitSlice = store.into();
@@ -898,7 +900,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0100_1011];
 	/// let bv: &BitSlice = store.into();
@@ -970,7 +972,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x0F];
 	/// let bv: &BitSlice = store.into();
@@ -1045,7 +1047,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xA6];
 	/// let bv: &BitSlice = store.into();;
@@ -1074,7 +1076,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xA6];
 	/// let bv: &BitSlice = store.into();
@@ -1108,7 +1110,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0xF0];
 	/// let bv: &mut BitSlice = store.into();
@@ -1152,7 +1154,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0xF0];
 	/// let bv: &mut BitSlice = store.into();
@@ -1200,7 +1202,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xFD];
 	/// let bv: &BitSlice = store.into();
@@ -1275,7 +1277,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x40];
 	/// let bv: &BitSlice = store.into();
@@ -1350,7 +1352,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xFD];
 	/// let bv: &BitSlice = store.into();
@@ -1383,7 +1385,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x40];
 	/// let bv: &BitSlice = store.into();
@@ -1419,7 +1421,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b111_000_10];
 	/// let bv: &BitSlice = store.into();
@@ -1444,7 +1446,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xFD, 0x25];
 	/// let bv: &BitSlice = store.into();
@@ -1495,7 +1497,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0xFD, 0x25];
 	/// let bv: &BitSlice = store.into();
@@ -1543,7 +1545,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0];
 	/// let bv: &mut BitSlice = store.into();
@@ -1614,7 +1616,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	/// ```
 	pub fn for_each<F>(&mut self, func: F)
 	where F: Fn(usize, bool) -> bool {
@@ -1641,7 +1643,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0000_0001, 0b0100_0000];
 	/// let bs: &BitSlice = store.into();
@@ -1668,7 +1670,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b0000_0001, 0b0100_0000];
 	/// let bs: &mut BitSlice = store.into();
@@ -1841,7 +1843,7 @@ where C: Cursor, T: Bits {
 	///
 	/// ```rust
 	/// # #[cfg(feature = "alloc")] {
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0; 2];
 	/// let src: &BitSlice = store.into();
@@ -1889,7 +1891,7 @@ where A: Cursor, B: Bits, C: Cursor, D: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let lstore: &[u8] = &[8, 16, 32, 0];
 	/// let rstore: &[u32] = &[0x10080400];
@@ -1951,7 +1953,7 @@ where A: Cursor, B: Bits, C: Cursor, D: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x45];
 	/// let slice: &BitSlice = store.into();
@@ -2009,7 +2011,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0, 128];
 	/// let bv: &mut BitSlice = store.into();
@@ -2043,7 +2045,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0, 128];
 	/// let bv: &BitSlice = store.into();
@@ -2078,7 +2080,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let src: &[u8] = &[1, 2, 3];
 	/// let bits: &BitSlice = src.into();
@@ -2120,7 +2122,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let src: &mut [u8] = &mut [1, 2, 3];
 	/// let bits: &mut BitSlice<LittleEndian, _> = src.into();
@@ -2225,7 +2227,7 @@ where C: Cursor, T: Bits {
 	///
 	/// ```rust
 	/// # #[cfg(feature = "alloc")] {
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	/// let bits: &BitSlice<LittleEndian, u16> = &bitvec![
 	///   LittleEndian, u16;
 	///   0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1,
@@ -2274,7 +2276,7 @@ where C: Cursor, T: Bits {
 	///
 	/// ```rust
 	/// # #[cfg(feature = "alloc")] {
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b01001011, 0b0100_0000];
 	/// let bits: &BitSlice = store.into();
@@ -2390,7 +2392,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b1010_1100];
 	/// let bits: &BitSlice = store.into();
@@ -2438,7 +2440,7 @@ where C: Cursor, T: Bits,
 	/// This example shows addition of a slice wrapping from max to zero.
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b1110_1111, 0b0000_0001];
 	/// let bv: &mut BitSlice = store.into();
@@ -2491,7 +2493,7 @@ where C: Cursor, T: Bits, I: IntoIterator<Item=bool> {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b0101_0100];
 	/// let other: &    [u8] = &    [0b0011_0000];
@@ -2533,7 +2535,7 @@ where C: Cursor, T: Bits, I: IntoIterator<Item=bool> {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	/// let store: &mut [u8] = &mut [0b0101_0100];
 	/// let other: &    [u8] = &    [0b0011_0000];
 	/// let lhs: &mut BitSlice = store.into();
@@ -2569,7 +2571,7 @@ where C: Cursor, T: Bits, I: IntoIterator<Item=bool> {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b0101_0100];
 	/// let other: &    [u8] = &    [0b0011_0000];
@@ -2609,7 +2611,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0010_0000];
 	/// let bits: &BitSlice = store.into();
@@ -2823,7 +2825,7 @@ where C: Cursor, T: 'a + Bits {
 	/// Negate an arbitrary positive number (first bit unset).
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b0110_1010];
 	/// let bv: &mut BitSlice = store.into();
@@ -2838,7 +2840,7 @@ where C: Cursor, T: 'a + Bits {
 	/// result to demonstrate round-trip correctness.
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0b1010_0110];
 	/// let bv: &mut BitSlice = store.into();
@@ -2851,7 +2853,7 @@ where C: Cursor, T: 'a + Bits {
 	/// convergence at zero.
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [128];
 	/// let bv: &mut BitSlice = store.into();
@@ -2903,7 +2905,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut [0; 2];
 	/// let bv: &mut BitSlice = store.into();
@@ -3008,7 +3010,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut[0x4B, 0xA5];
 	/// let bv: &mut BitSlice = store.into();
@@ -3114,7 +3116,7 @@ where C: Cursor, T: Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &mut [u8] = &mut[0x4B, 0xA5];
 	/// let bv: &mut BitSlice = store.into();
@@ -3205,7 +3207,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[1];
 	/// let bv: &BitSlice = store.into();
@@ -3252,7 +3254,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -3289,7 +3291,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3323,7 +3325,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3354,7 +3356,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3392,7 +3394,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3600,7 +3602,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bits: &BitSlice = store.into();
@@ -3627,7 +3629,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[1];
 	/// let bv: &BitSlice = store.into();
@@ -3672,7 +3674,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -3708,7 +3710,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3737,7 +3739,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -3768,7 +3770,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[2];
 	/// let bv: &BitSlice = store.into();
@@ -3800,7 +3802,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4017,7 +4019,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[1];
 	/// let bv: &BitSlice = store.into();
@@ -4063,7 +4065,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -4099,7 +4101,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4129,7 +4131,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4160,7 +4162,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[2];
 	/// let bv: &BitSlice = store.into();
@@ -4191,7 +4193,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4236,7 +4238,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[1];
 	/// let bv: &BitSlice = store.into();
@@ -4283,7 +4285,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -4321,7 +4323,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4355,7 +4357,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4386,7 +4388,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[2];
 	/// let bv: &BitSlice = store.into();
@@ -4421,7 +4423,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4627,7 +4629,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bits: &BitSlice = store.into();
@@ -4654,7 +4656,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[1];
 	/// let bv: &BitSlice = store.into();
@@ -4699,7 +4701,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -4735,7 +4737,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4764,7 +4766,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4795,7 +4797,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -4827,7 +4829,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -5039,7 +5041,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0b0010_1101];
 	/// let bv: &BitSlice = store.into();
@@ -5086,7 +5088,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x80];
 	/// let bv: &BitSlice = store.into();
@@ -5125,7 +5127,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -5161,7 +5163,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
@@ -5192,7 +5194,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[2];
 	/// let bv: &BitSlice = store.into();
@@ -5225,7 +5227,7 @@ where C: Cursor, T: 'a + Bits {
 	/// # Examples
 	///
 	/// ```rust
-	/// use bitvec::*;
+	/// use bitvec::prelude::*;
 	///
 	/// let store: &[u8] = &[0x4B];
 	/// let bv: &BitSlice = store.into();
