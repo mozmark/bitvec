@@ -43,8 +43,11 @@ extern crate alloc;
 #[cfg(feature = "std")]
 extern crate core;
 
-#[cfg(all(feature = "alloc", feature = "serdes"))]
+#[cfg(feature = "serdes")]
 extern crate serde;
+
+#[cfg(all(test, feature = "serdes"))]
+extern crate serde_test;
 
 #[macro_use]
 mod macros;
@@ -62,7 +65,7 @@ pub mod boxed;
 #[cfg(feature = "alloc")]
 pub mod vec;
 
-#[cfg(all(feature = "alloc", feature = "serdes"))]
+#[cfg(all(feature = "serdes"))]
 mod serdes;
 
 /// Expose crate internals for use in doctests and external tests.

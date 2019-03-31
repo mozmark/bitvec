@@ -104,7 +104,7 @@ use core::{
 		self,
 		NonNull,
 	},
-    slice,
+	slice,
 };
 #[cfg(feature = "std")]
 use std::{
